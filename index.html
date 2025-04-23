@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Samuel Henares Choaibi">
+    <meta name="description" content="Lista de Actividades">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="images/lista.png" type="image/png">    <title>Lista de Actividades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-blue-950 text-white h-screen p-6 fixed top-0 left-0">
+        <h2 class="text-lg font-bold mb-6">MENÚ</h2>
+        <ul class="space-y-4">
+            <li>
+                <a href="index.html"
+                    class="relative text-white transition-all duration-300 ease-in-out hover:text-blue-200 hover:bg-blue-800 hover:rounded-md px-3 py-2">
+                    Lista de Actividades
+                </a>
+            </li>
+            <li>
+                <a href="crear-tarea.html"
+                    class="relative text-white transition-all duration-300 ease-in-out hover:text-blue-200 hover:bg-blue-800 hover:rounded-md px-3 py-2">
+                    Crear Tarea
+                </a>
+            </li>
+            <li>
+                <a href="categorias.html"
+                    class="relative text-white transition-all duration-300 ease-in-out hover:text-blue-200 hover:bg-blue-800 hover:rounded-md px-3 py-2">
+                    Lista de Categorías
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="ml-64 container mx-auto p-6  flex-1">
+        <h1 class="text-3xl font-bold mb-6">Lista de Actividades</h1>
+
+        <!-- Crear tarea -->
+        <section class="bg-white p-6 rounded-lg shadow mb-8">
+            <div class="flex flex-col gap-4">
+                <a href="crear-tarea.html">
+                    <button id="add-task" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                        Crear tarea
+                    </button>
+                </a>
+
+                <div class="flex gap-4">
+                    <input id="task-input" type="text" class="flex-1 p-2 border rounded"
+                        placeholder="Nombre del archivo">
+                </div>
+                <button id="upload-task" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                    Subir
+                </button>
+            </div>
+        </section>
+
+        <!-- Tareas pendientes -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Tareas pendientes</h2>
+                <select id="pending-filter" class="p-2 border rounded">
+                    <option value="Todas">Todas</option>
+                </select>
+            </div>
+            <ul id="pending-tasks" class="space-y-2"></ul>
+        </section>
+
+        <!-- Tareas finalizadas -->
+        <section class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Tareas finalizadas</h2>
+                <select id="completed-filter" class="p-2 border rounded">
+                    <option value="Todas">Todas</option>
+                </select>
+            </div>
+            <ul id="completed-tasks" class="space-y-2"></ul>
+        </section>
+
+        <!-- Chart -->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Estadísticas</h2>
+            <div class="chart-container">
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>
