@@ -1,4 +1,4 @@
-class Task {
+class Tarea {
     constructor(id, titulo, descripcio, data, categoria, prioritat, realitzada) {
         this.id = id;
         this.titulo = titulo;
@@ -14,8 +14,9 @@ class Task {
     }
 }
 
-class Category {
-    constructor(nom, color){
+class Categoria {
+    constructor(id, nom, color){
+        this.id = id;
         this.nom = nom;
         this.color = color;
     }
