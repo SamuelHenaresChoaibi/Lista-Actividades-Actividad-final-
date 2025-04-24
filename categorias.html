@@ -6,8 +6,8 @@
     <meta name="author" content="Samuel Henares Choaibi">
     <meta name="description" content="Crear Tarea">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/crear-logo.png" type="image/png">
-    <title>Crear Tarea</title>
+    <link rel="icon" href="images/categorias.png" type="image/png">
+    <title>Categorías</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -38,54 +38,36 @@
     </aside>
 
     <div class="ml-64 container mx-auto p-6  flex-1">
-        <h1 class="text-3xl font-bold mb-6">Crear Nueva Tarea</h1>
+        <h1 class="text-3xl font-bold mb-6">Categorías</h1>
 
         <!-- Crear tarea -->
         <section class="bg-white p-6 rounded-lg shadow mb-8">
 
             <div class="flex flex-col gap-4">
-                <!-- Título -->
-                <h2 class="py-1 font-bold ">Título </h2>
+                <!-- Nueva categoría -->
+                <h2 class="py-1 font-bold "> Nueva Categoría </h2>
                 <div class="flex gap-4">
-                    <input id="name-task" type="text" class="flex-1 p-2 border rounded"
-                        placeholder="Nombre de la tarea">
+                    <input id="name-category" type="text" class="flex-1 p-2 border rounded"
+                        placeholder="Nombre de la categoria">
                 </div>
 
-                <!-- Descripción -->
-                <h2 class="py-1 font-bold ">Descripción </h2>
-                <div class="flex gap-4">
-                    <textarea id="description" class="flex-1 p-2 border rounded" placeholder="Nombre de la tarea" rows="4"></textarea>
-                </div>
-                
                 <!-- Fecha -->
-                <h2 class="py-1 font-bold ">Fecha </h2>
+                <h2 class="py-1 font-bold ">Color de la Categoría </h2>
                 <div class="flex gap-4">
-                    <input id="date-task" type="date" class="flex-1 p-2 border rounded"
-                        placeholder="Nombre de la tarea">
-                </div>
-
-                <!-- Categoria -->
-                <h2 class="py-1 font-bold ">Categoria</h2>
-                <div class="flex gap-4">
-                    <select id="categoria" class="flex-1 p-2 border rounded">
-
-                    </select>
-                </div>
-
-                <!-- Prioridad -->
-                <h2 class="py-1 font-bold ">Prioridad </h2>
-                <div class="flex gap-4">
-                    <select id="priority" class="flex-1 p-2 border rounded">
-                        <option value="prioridad">Alta</option>
-                        <option value="prioridad">Media</option>
-                        <option value="prioridad">Baja</option>
-                    </select>
+                    <input id="category-color" type="color" class="flex-1 p-1 border rounded">
                 </div>
 
                 <!-- Botón para crear tarea -->
                 <button id="create-task" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Crear Tarea
+                    Añadir Categoría
                 </button>
+            </div>
+        </section>
+
+        <!-- Lista de Categorías -->
+        <section class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-bold mb-4">Lista de Categorías</h2>
+            <div class="categories-container">
             </div>
         </section>
     </div>
