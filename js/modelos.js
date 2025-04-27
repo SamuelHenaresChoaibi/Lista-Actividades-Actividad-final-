@@ -4,7 +4,10 @@ class Tarea {
         this.titulo = titulo;
         this.descripcio = descripcio;
         this.data = data;
-        this.categoria = categoria;
+        this.categoria = {
+            nom: categoria.nom,
+            color: categoria.color
+        };
         this.prioritat = prioritat;
         this.realitzada = realitzada;
     }

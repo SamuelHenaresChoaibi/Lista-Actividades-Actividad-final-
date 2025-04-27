@@ -23,17 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const fechaValue = fechaInput.value;
         const categoriaValue = categoriaSelect.value;
         const prioridadValue = prioridadSelect.value;
+        let colorCategoria = '';
 
         if (!nomValue || !descripcionValue || !fechaValue || !categoriaValue || !prioridadValue) {
             alert("Hay que rellenar todos los campos para crear una tarea");
         } else {
+            categorias.forEach(categoria => {
+                if(categoria.nom === categoriaValue){
+                    colorCategoria = categoria.color;
+                }
+            });
             const tareas = cargarTareas();
             const tareaNueva = new Tarea(
                 generarIdTarea(tareas), 
                 nomValue, 
                 descripcionValue, 
                 fechaValue, 
-                categoriaValue, 
+                {
+                    nom: categoriaValue,
+                    color: colorCategoria
+                }, 
                 prioridadValue, 
                 false);
 
@@ -42,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nomInput.value = '';
             descripcionInput.value = '';
             fechaInput.value = '';
-            prioridadSelect.value = 'alta';
+            prioridadSelect.value = 'Alta';
         }
     });
 

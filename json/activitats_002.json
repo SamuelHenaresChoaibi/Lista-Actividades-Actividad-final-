@@ -5,7 +5,7 @@
     "descripcio": "Carrega activitats externes sense duplicats.",
     "data": "2025-04-22",
     "categoria": { "nom": "Dades", "color": "#81ecec" },
-    "prioritat": "Mitjana",
+    "prioritat": "Media",
     "realitzada": false
   },
   {
@@ -14,7 +14,7 @@
     "descripcio": "Permet afegir i eliminar categories.",
     "data": "2025-04-24",
     "categoria": { "nom": "Funcionalitat", "color": "#00cec9" },
-    "prioritat": "Mitjana",
+    "prioritat": "Media",
     "realitzada": false
   },
   {
@@ -32,7 +32,7 @@
     "descripcio": "Fes que la interfície sigui usable i atractiva.",
     "data": "2025-04-28",
     "categoria": { "nom": "Disseny", "color": "#e5989b" },
-    "prioritat": "Baixa",
+    "prioritat": "Baja",
     "realitzada": false
   },
   {
