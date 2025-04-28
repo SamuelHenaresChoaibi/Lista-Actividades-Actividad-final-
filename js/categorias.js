@@ -12,8 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'flex justify-between items-center p-2 border-b';
             div.innerHTML = `
-                <span style="color: ${categoria.color}">${categoria.nom}</span>
-                <button class="delete-category bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${categoria.id}">Eliminar</button>
+                <p class="">
+                    <span style="background: ${categoria.color}; color: #333; font-weight: bolder; padding: 4px 8px; border-radius: 6px;">
+                        ${categoria.nom}
+                    </span>
+                </p>
+                <button class="delete-category bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${categoria.id}">
+                    Eliminar
+                </button>
             `;
             categoriasContainer.appendChild(div);
         });
