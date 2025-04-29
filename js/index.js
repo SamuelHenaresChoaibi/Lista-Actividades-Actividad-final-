@@ -1,3 +1,4 @@
+import { cargarChart } from './grafics.js';
 document.addEventListener('DOMContentLoaded', () => {
     const archivoInput = document.getElementById('task-input');
     const filtroPendientes = document.getElementById('pending-filter');
@@ -60,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 tareasPendientes.appendChild(li);
             }
+
         });
 
         document.querySelectorAll('.mark-task').forEach(boton => {
@@ -68,12 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tareas = cargarTareas();
                 const tarea = tareas.find(t => t.id === id);
                 tareas.forEach(tarea => {
-                    if(tarea.id === id){
+                    if (tarea.id === id) {
                         tarea.realitzada = !tarea.realitzada;
                     }
                 });
                 guardarTareas(tareas);
                 cargarListaTareas();
+                cargarChart();
             });
         });
 
@@ -173,11 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             nuevaTarea.categoria,
                             nuevaTarea.prioritat,
                             nuevaTarea.realitzada
-                        ));                    }
+                        ));
+                    }
                 }
                 guardarTareas(tareas);
                 cargarListaTareas();
                 archivoInput.value = '';
+                cargarChart();
+
             })
             .catch(error => {
                 alert('Error al cargar el archivo: ' + error.message);
@@ -186,4 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cargarListaTareas();
+    cargarChart();
 });
+
+

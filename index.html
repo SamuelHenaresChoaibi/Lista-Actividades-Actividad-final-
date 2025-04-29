@@ -6,11 +6,15 @@
     <meta name="author" content="Samuel Henares Choaibi">
     <meta name="description" content="Lista de Actividades">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="images/lista.png" type="image/png">    <title>Lista de Actividades</title>
+    <link rel="icon" href="images/lista.png" type="image/png">
+    <title>Lista de Actividades</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="js/index.js"></script>
+    <script type="module" src="js/index.js"></script>
     <script src="js/modelos.js"></script>
     <script src="js/storage.js"></script>
+    <script type="module" src="js/grafics.js"></script>
+
 </head>
 
 <body class="bg-gray-50 min-h-screen flex">
@@ -87,8 +91,7 @@
         <!-- Chart -->
         <section class="bg-white p-6 rounded-lg shadow">
             <h2 class="text-xl font-bold mb-4">Estadísticas</h2>
-            <div class="chart-container">
-            </div>
+                <canvas id="taskChart"></canvas>
         </section>
     </div>
 </body>
