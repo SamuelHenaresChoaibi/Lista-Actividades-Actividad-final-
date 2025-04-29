@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${categoria.nom}
                     </span>
                 </p>
-                <button class="delete-category bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${categoria.id}">
+                <button class="delete-category bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded" data-nom="${categoria.nom}">
                     Eliminar
                 </button>
             `;
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.delete-category').forEach(boton => {
             boton.addEventListener('click', () => {
-                eliminarCategoria(boton.dataset.id);
+                eliminarCategoria(boton.dataset.nom);
                 cargarListaCategorias();
             });
         });
@@ -39,18 +39,28 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('El nombre de la categoría es obligatorio');
             return;
         }
-
         const categorias = cargarCategorias();
-        const nuevaCategoria = new Categoria(generarIdCategoria(categorias), nom, color);
+        function comprobarRepetido(){
+            let existe = false;
+        categorias.forEach(categoria => {
+            if(categoria.nom === nom){
+                alert('Esta categoria ya existe. Bórrela y cree otra o póngale otro nombre')
+                existe = true;
+            }
+        });
+        if(!existe){
+             const nuevaCategoria = new Categoria(nom, color);
         categorias.push(nuevaCategoria);
         guardarCategorias(categorias);
-        cargarListaCategorias();
+        cargarListaCategorias(); 
+        }
+      
+        }     
+        cargarListaCategorias(); 
+        comprobarRepetido();
+   
         nomInput.value = '';
         colorInput.value = '#000000';
-    });
-
-    cargarBoton.addEventListener('click', () => {
-        cargarListaCategorias();
     });
 
     cargarListaCategorias();

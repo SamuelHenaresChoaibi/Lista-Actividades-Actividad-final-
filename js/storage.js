@@ -39,10 +39,6 @@ function generarIdTarea(tareas) {
     return generarId(tareas, 'task')
 }
 
-function generarIdCategoria(categorias) {
-    return generarId(categorias, 'cat');
-}
-
 function eliminarTarea(idTarea) {
     const tareas = cargarTareas();
     const tareasActualizadas = [];
@@ -54,14 +50,14 @@ function eliminarTarea(idTarea) {
     guardarTareas(tareasActualizadas);
 }
 
-function eliminarCategoria(idCategoria) {
+function eliminarCategoria(nomCategoria) {
     const categorias = cargarCategorias();
-    const categorasActualizadas = [];
+    const categoriasActualizadas = [];
     categorias.forEach(categoria => {
-        if (categoria.id !== idCategoria) {
-            categorasActualizadas.push(categoria);
+        if (categoria.nom !== nomCategoria) {
+            categoriasActualizadas.push(categoria);
         }
     });
-    console.log(categorasActualizadas);
-    guardarCategorias(categorasActualizadas);
+    console.log(categoriasActualizadas);
+    guardarCategorias(categoriasActualizadas);
 }

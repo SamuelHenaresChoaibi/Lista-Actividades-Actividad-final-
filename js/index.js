@@ -7,9 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const tareasCompletas = document.getElementById('completed-tasks');
     const botonSubirArchivo = document.getElementById('upload-task');
 
-    function cargarListaTareas() {
+    function cargarListaTareas(filtroPendientesValue = 'Todas', filtroCompletadosValue = 'Todas') {
         const tareas = cargarTareas();
         const categorias = cargarCategorias();
+
+        const previoFiltroPendientes = filtroPendientesValue;
+        const previoFiltroCompletados = filtroCompletadosValue;
 
         tareasPendientes.innerHTML = '';
         tareasCompletas.innerHTML = '';
@@ -24,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
             filtroCompletados.appendChild(option.cloneNode(true));
             filtroPendientes.appendChild(option);
         });
+
+        filtroPendientes.value = previoFiltroPendientes;
+        filtroCompletados.value = previoFiltroCompletados;
 
         tareas.forEach(tarea => {
             let prioridadColor = '';
@@ -68,15 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
             boton.addEventListener('click', () => {
                 const id = boton.dataset.id;
                 const tareas = cargarTareas();
-                const tarea = tareas.find(t => t.id === id);
-                tareas.forEach(tarea => {
-                    if (tarea.id === id) {
-                        tarea.realitzada = !tarea.realitzada;
+                tareas.forEach(t => {
+                    if (t.id === id) {
+                        t.realitzada = !t.realitzada;
                     }
                 });
                 guardarTareas(tareas);
-                cargarListaTareas();
+                cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
                 cargarChart();
+                if (filtroPendientes.value !== 'Todas') {
+                    filtrarTareas('pendientes');
+                }
+                if (filtroCompletados.value !== 'Todas') {
+                    filtrarTareas('completados');
+                }
             });
         });
 
@@ -116,31 +127,66 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
 
                             const li = document.createElement('li');
-                            li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
-                            li.innerHTML = `
-                            <div class="flex-column">
-                                    <span>
-                                    <b>Tarea: </b>${tarea.titulo}
-                                    </span>
-                                     <p><b>Fecha: </b>${tarea.data}</p>                 
-                                    <p><b>Categoría: </b><span style="background-color: ${tarea.categoria.color}; padding: 2px 6px; border-radius: 4px; color: white;">${tarea.categoria.nom}</span></p>
-                                    <p><b>Prioridad: </b>${tarea.prioritat}</p>
-                                    <p><b>Descripción: </b>${tarea.descripcio}</p>
-                                    </div>                
-                                    <div class="flex space-x-2">
-                                    <button class="mark-task transition-all duration-300 hover:bg-blue-400 hover:text-white px-2 py-1 rounded" data-id="${tarea.id}">
-                                        ${tarea.realitzada ? '✓' : '▢'}
-                                    </button>
-                                    <button class="delete-task transition-all duration-300 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${tarea.id}">
-                                        🗑️
-                                    </button>
-                                </div>
-                            `;
+            li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
+            li.innerHTML = `
+            <div class="flex-column">
+                    <span>
+                    <b>Tarea: </b>${tarea.titulo}
+                    </span>
+                     <p><b>Fecha: </b>${tarea.data}</p>                 
+                    <p><b>Categoría: </b><span style="background-color: ${tarea.categoria.color}; padding: 2px 6px; border-radius: 4px; color: #333; font-weight: bold;">${tarea.categoria.nom}</span></p>
+                    <p><b>Prioridad: </b>${tarea.prioritat}</p>
+                    <p><b>Descripción: </b>${tarea.descripcio}</p>
+                    </div>                
+                    <div class="flex space-x-2">
+                    <button class="mark-task transition-all duration-300 hover:bg-blue-400 hover:text-white px-2 py-1 rounded" data-id="${tarea.id}">
+                        ${tarea.realitzada ? '✓' : '▢'}
+                    </button>
+                    <button class="delete-task transition-all duration-300 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${tarea.id}">
+                        🗑️
+                    </button>
+                </div>
+            `;
                             listaTareas.appendChild(li);
                         }
 
                     }
                 });
+                document.querySelectorAll('.mark-task').forEach(boton => {
+                    boton.addEventListener('click', () => {
+                        const id = boton.dataset.id;
+                        const tareas = cargarTareas();
+                        tareas.forEach(t => {
+                            if (t.id === id) {
+                                t.realitzada = !t.realitzada;
+                            }
+                        });
+                        guardarTareas(tareas);
+                        cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                        cargarChart();
+                        if (filtroPendientes.value !== 'Todas') {
+                            filtrarTareas('pendientes');
+                        }
+                        if (filtroCompletados.value !== 'Todas') {
+                            filtrarTareas('completados');
+                        }
+                    });
+                });
+        
+                document.querySelectorAll('.delete-task').forEach(boton => {
+                    boton.addEventListener('click', () => {
+                        const id = boton.dataset.id;
+                        eliminarTarea(id);
+                        cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                        if (filtroPendientes.value !== 'Todas') {
+                            filtrarTareas('pendientes');
+                        }
+                        if (filtroCompletados.value !== 'Todas') {
+                            filtrarTareas('completados');
+                        }
+                    });
+                });
+
             } else {
                 cargarListaTareas();
             }
@@ -158,6 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 const tareas = cargarTareas();
+                const categorias = cargarCategorias();
                 for (let i = 0; i < data.length; i++) {
                     let nuevaTarea = data[i];
                     let existe = false;
@@ -177,13 +224,30 @@ document.addEventListener('DOMContentLoaded', () => {
                             nuevaTarea.prioritat,
                             nuevaTarea.realitzada
                         ));
+
+                        const nuevaCategoria = nuevaTarea.categoria;
+                        if (nuevaCategoria && nuevaCategoria.nom && nuevaCategoria.color) {
+                            let existeCategoria = false;
+                            for (let i = 0; i < categorias.length; i++) {
+                                if (categorias[i].nom === nuevaCategoria.nom && categorias[i].color === nuevaCategoria.color) {
+                                    existeCategoria = true;
+                                    break;
+                                }
+                            }
+
+                            if (!existeCategoria) {
+                                categorias.push(new Categoria(nuevaCategoria.nom, nuevaCategoria.color));
+                            }
+                        } else {
+                            console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
+                        }
+                        guardarTareas(tareas);
+                        guardarCategorias(categorias);
+                        cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                        archivoInput.value = '';
+                        cargarChart();
                     }
                 }
-                guardarTareas(tareas);
-                cargarListaTareas();
-                archivoInput.value = '';
-                cargarChart();
-
             })
             .catch(error => {
                 alert('Error al cargar el archivo: ' + error.message);

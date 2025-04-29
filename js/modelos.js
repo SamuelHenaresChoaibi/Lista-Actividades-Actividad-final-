@@ -18,8 +18,7 @@ class Tarea {
 }
 
 class Categoria {
-    constructor(id, nom, color){
-        this.id = id;
+    constructor(nom, color){
         this.nom = nom;
         this.color = color;
     }
