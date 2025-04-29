@@ -100,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         eliminarTarea(id);
                     }
                 });
-                cargarListaTareas();
+                cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                cargarChart();
+
             });
         });
 
@@ -127,8 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
 
                             const li = document.createElement('li');
-            li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
-            li.innerHTML = `
+                            li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
+                            li.innerHTML = `
             <div class="flex-column">
                     <span>
                     <b>Tarea: </b>${tarea.titulo}
@@ -172,12 +174,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                 });
-        
+
                 document.querySelectorAll('.delete-task').forEach(boton => {
                     boton.addEventListener('click', () => {
                         const id = boton.dataset.id;
                         eliminarTarea(id);
                         cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                        cargarChart();
                         if (filtroPendientes.value !== 'Todas') {
                             filtrarTareas('pendientes');
                         }
@@ -188,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
             } else {
-                cargarListaTareas();
+                cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
             }
         }
     }
@@ -216,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     if (!existe) {
                         tareas.push(new Tarea(
-                            nuevaTarea.id,
+                            generarIdTarea(tareas),
                             nuevaTarea.titol,
                             nuevaTarea.descripcio,
                             nuevaTarea.data,
@@ -224,29 +227,30 @@ document.addEventListener('DOMContentLoaded', () => {
                             nuevaTarea.prioritat,
                             nuevaTarea.realitzada
                         ));
-
-                        const nuevaCategoria = nuevaTarea.categoria;
-                        if (nuevaCategoria && nuevaCategoria.nom && nuevaCategoria.color) {
-                            let existeCategoria = false;
-                            for (let i = 0; i < categorias.length; i++) {
-                                if (categorias[i].nom === nuevaCategoria.nom && categorias[i].color === nuevaCategoria.color) {
-                                    existeCategoria = true;
-                                    break;
-                                }
-                            }
-
-                            if (!existeCategoria) {
-                                categorias.push(new Categoria(nuevaCategoria.nom, nuevaCategoria.color));
-                            }
-                        } else {
-                            console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
-                        }
-                        guardarTareas(tareas);
-                        guardarCategorias(categorias);
-                        cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
-                        archivoInput.value = '';
-                        cargarChart();
                     }
+
+                    const nuevaCategoria = nuevaTarea.categoria;
+                    if (nuevaCategoria && nuevaCategoria.nom && nuevaCategoria.color) {
+                        let existeCategoria = false;
+                        for (let i = 0; i < categorias.length; i++) {
+                            if (categorias[i].nom === nuevaCategoria.nom && categorias[i].color === nuevaCategoria.color) {
+                                existeCategoria = true;
+                                break;
+                            }
+                        }
+
+                        if (!existeCategoria) {
+                            categorias.push(new Categoria(nuevaCategoria.nom, nuevaCategoria.color));
+                        }
+                    } else {
+                        console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
+                    }
+                    guardarTareas(tareas);
+                    guardarCategorias(categorias);
+                    cargarListaTareas(filtroPendientes.value, filtroCompletados.value);
+                    archivoInput.value = '';
+                    cargarChart();
+
                 }
             })
             .catch(error => {
