@@ -2,11 +2,26 @@ function guardarTareas(tareas) {
     localStorage.setItem('tareas', JSON.stringify(tareas));
 }
 
+function guardarTareasJSON(tareasJSON){
+    localStorage.setItem('tareasJSON', JSON.stringify(tareasJSON));
+}
+
 function cargarTareas() {
     const tareas = localStorage.getItem('tareas');
     try {
         console.log(tareas);
         return tareas ? JSON.parse(tareas) : [];
+    } catch (error) {
+        console.error('Error al cargar tareas:', error);
+        return [];
+    }
+}
+
+function cargarTareasJSON() {
+    const tareasJSON = localStorage.getItem('tareasJSON');
+    try {
+        console.log(tareasJSON);
+        return tareasJSON ? JSON.parse(tareasJSON) : [];
     } catch (error) {
         console.error('Error al cargar tareas:', error);
         return [];
@@ -41,13 +56,14 @@ function generarIdTarea(tareas) {
 
 function eliminarTarea(idTarea) {
     const tareas = cargarTareas();
-    const tareasActualizadas = [];
-    tareas.forEach(tarea => {
-        if (tarea.id !== idTarea) {
-            tareasActualizadas.push(tarea);
-        }
-    });
+    const tareasActualizadas = tareas.filter(tarea => tarea.id !== idTarea);
     guardarTareas(tareasActualizadas);
+}
+
+function eliminarTareaJSON(idTarea) {
+    const tareasJSON = cargarTareasJSON();
+    const tareasActualizadasJSON = tareasJSON.filter(tarea => tarea.id !== idTarea);
+    guardarTareasJSON(tareasActualizadasJSON);
 }
 
 function eliminarCategoria(nomCategoria) {

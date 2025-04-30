@@ -1,83 +1,118 @@
 import { cargarChart } from './grafics.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const archivoInput = document.getElementById('task-input');
     const tareasPendientes = document.getElementById('pending-tasks');
     const tareasCompletas = document.getElementById('completed-tasks');
     const botonSubirArchivo = document.getElementById('upload-task');
 
+    function crearTareaHTML(tarea) {
+        const prioridadColor = tarea.prioritat === 'Alta' ? 'bg-red-200' :
+            tarea.prioritat === 'Media' ? 'bg-yellow-200' : 'bg-green-200';
+
+        const li = document.createElement('li');
+        li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
+        li.innerHTML = `
+            <div class="flex-column hover">
+                <span><b>Tarea: </b>${tarea.titol}</span>
+                <p><b>Fecha: </b>${tarea.data}</p>
+                <p><b>Categoría: </b><span style="background-color: ${tarea.categoria.color}; padding: 2px 6px; border-radius: 4px; color: #333; font-weight: bold;">${tarea.categoria.nom}</span></p>
+                <p><b>Prioridad: </b>${tarea.prioritat}</p>
+                <p><b>Descripción: </b>${tarea.descripcio}</p>
+            </div>
+            <div class="flex space-x-2">
+                <button class="mark-task transition-all duration-300 hover:bg-blue-400 hover:text-white px-2 py-1 rounded" data-id="${tarea.id}" data-title="${tarea.titol}">
+                    ${tarea.realitzada ? '✓' : '▢'}
+                </button>
+                <button class="delete-task transition-all duration-300 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${tarea.id}" data-title="${tarea.titol}">
+                    🗑️
+                </button>
+            </div>
+        `;
+        return li;
+    }
+
     function cargarListaTareas() {
         const tareas = cargarTareas();
-        const categorias = cargarCategorias();
+        const tareasJSON = cargarTareasJSON();
 
+        if (!archivoInput || !tareasPendientes || !tareasCompletas || !botonSubirArchivo) {
+            console.error('Campos incompletos');
+            return;
+        }
+    
         tareasPendientes.innerHTML = '';
         tareasCompletas.innerHTML = '';
-
+    
         tareas.forEach(tarea => {
-            let prioridadColor = '';
-            if (tarea.prioritat === 'Alta') {
-                prioridadColor = 'bg-red-200';
-            } else if (tarea.prioritat === 'Media') {
-                prioridadColor = 'bg-yellow-200';
-            } else if (tarea.prioritat === 'Baja') {
-                prioridadColor = 'bg-green-200';
-            }
-
-            const li = document.createElement('li');
-            li.className = `flex justify-between items-center p-2 border-b ${prioridadColor} rounded-lg`;
-            li.innerHTML = `
-            <div class="flex-column">
-                    <span>
-                    <b>Tarea: </b>${tarea.titulo}
-                    </span>
-                     <p><b>Fecha: </b>${tarea.data}</p>                 
-                    <p><b>Categoría: </b><span style="background-color: ${tarea.categoria.color}; padding: 2px 6px; border-radius: 4px; color: #333; font-weight: bold;">${tarea.categoria.nom}</span></p>
-                    <p><b>Prioridad: </b>${tarea.prioritat}</p>
-                    <p><b>Descripción: </b>${tarea.descripcio}</p>
-                    </div>                
-                    <div class="flex space-x-2">
-                    <button class="mark-task transition-all duration-300 hover:bg-blue-400 hover:text-white px-2 py-1 rounded" data-id="${tarea.id}">
-                        ${tarea.realitzada ? '✓' : '▢'}
-                    </button>
-                    <button class="delete-task transition-all duration-300 hover:bg-red-600 text-white px-2 py-1 rounded" data-id="${tarea.id}">
-                        🗑️
-                    </button>
-                </div>
-            `;
+            const li = crearTareaHTML(tarea);
             if (tarea.realitzada) {
                 tareasCompletas.appendChild(li);
             } else {
                 tareasPendientes.appendChild(li);
             }
-
         });
 
+        tareasJSON.forEach(tarea => {
+            const li = crearTareaHTML(tarea);
+            if (tarea.realitzada) {
+                tareasCompletas.appendChild(li);
+            } else {
+                tareasPendientes.appendChild(li);
+            }
+        });
+    
         document.querySelectorAll('.mark-task').forEach(boton => {
             boton.addEventListener('click', () => {
                 const id = boton.dataset.id;
+                const title = boton.dataset.title;
                 const tareas = cargarTareas();
+                const tareasJSON = cargarTareasJSON();
                 tareas.forEach(t => {
-                    if (t.id === id) {
+                    if (t.id === id && t.titol === title) {
                         t.realitzada = !t.realitzada;
                     }
                 });
+
+                tareasJSON.forEach(t => {
+                    if (t.id === id && t.titol === title) {
+                        t.realitzada = !t.realitzada;
+                    }
+                });
+
                 guardarTareas(tareas);
+                guardarTareasJSON(tareasJSON);
                 cargarListaTareas();
                 cargarChart();
             });
         });
-
+    
         document.querySelectorAll('.delete-task').forEach(boton => {
             boton.addEventListener('click', () => {
                 const id = boton.dataset.id;
+                const title = boton.dataset.title;
                 const tareas = cargarTareas();
+                const tareasJSON = cargarTareasJSON();
+                let existeTarea = false;
+                let existeTareaJSON = false;
+
                 tareas.forEach(tarea => {
-                    if (tarea.id === id) {
-                        eliminarTarea(id);
+                    if(tarea.id === id && tarea.titol === title){
+                        existeTarea = true;
                     }
                 });
+    
+                tareasJSON.forEach(tarea => {
+                    if(tarea.id === id && tarea.titol === title){
+                        existeTareaJSON = true;
+                    }
+                });
+
+                if(existeTarea) eliminarTarea(id);
+                if(existeTareaJSON) eliminarTareaJSON(id);                
+                
                 cargarListaTareas();
                 cargarChart();
-
             });
         });
     }
@@ -89,22 +124,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch(`json/${nombreArchivo}`)
+        fetch(`json/${nombreArchivo}.json`)
             .then(response => response.json())
             .then(data => {
-                const tareas = cargarTareas();
+                const tareasJSON = cargarTareasJSON();
                 const categorias = cargarCategorias();
                 for (let i = 0; i < data.length; i++) {
                     let nuevaTarea = data[i];
                     let existe = false;
-                    for (let j = 0; j < tareas.length; j++) {
-                        if (tareas[j].id === nuevaTarea.id) {
+                    for (let j = 0; j < tareasJSON.length; j++) {
+                        if (tareasJSON[j].id === nuevaTarea.id) {
                             existe = true;
                             break;
                         }
                     }
                     if (!existe) {
-                        tareas.push(new Tarea(
+                        tareasJSON.push(new Tarea(
                             nuevaTarea.id,
                             nuevaTarea.titol,
                             nuevaTarea.descripcio,
@@ -132,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
                     }
                 }
-                    guardarTareas(tareas);
+                    guardarTareasJSON(tareasJSON);
                     guardarCategorias(categorias);
                     cargarListaTareas();
                     archivoInput.value = '';
@@ -148,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cargarListaTareas();
     cargarChart();
+    
 });
 
 

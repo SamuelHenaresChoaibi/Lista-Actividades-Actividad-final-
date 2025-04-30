@@ -1,7 +1,7 @@
 class Tarea {
-    constructor(id, titulo, descripcio, data, categoria, prioritat, realitzada) {
+    constructor(id, titol, descripcio, data, categoria, prioritat, realitzada) {
         this.id = id;
-        this.titulo = titulo;
+        this.titol = titol;
         this.descripcio = descripcio;
         this.data = data;
         this.categoria = {

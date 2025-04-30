@@ -16,6 +16,7 @@ export function cargarChart() {
 
   function devolverTareasCompletas(mes) {
     const tareas = cargarTareas();
+    const tareasJSON = cargarTareasJSON();
     let numTareasCompletasMes = 0;
 
     const meses = {
@@ -40,6 +41,15 @@ export function cargarChart() {
     for (let i = 0; i < tareas.length; i++) {
       if (tareas[i].realitzada) {
         const fecha = new Date(tareas[i].data);
+        if (fecha.getMonth() === mesNumero) {
+          numTareasCompletasMes++;
+        }
+      }
+    }
+
+    for (let i = 0; i < tareasJSON.length; i++) {
+      if (tareasJSON[i].realitzada) {
+        const fecha = new Date(tareasJSON[i].data);
         if (fecha.getMonth() === mesNumero) {
           numTareasCompletasMes++;
         }
