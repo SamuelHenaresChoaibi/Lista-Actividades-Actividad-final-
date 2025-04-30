@@ -1,15 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    //Elementos HTML
     const nomInput = document.getElementById('name-category');
     const colorInput = document.getElementById('category-color');
     const crearBoton = document.getElementById('create-category');
     const cargarBoton = document.getElementById('load-categories');
     const categoriasContainer = document.getElementById('categories-container');
 
-    function cargarListaCategorias() {
-        const categorias = cargarCategorias();
-        categoriasContainer.innerHTML = '';
-        categorias.forEach(categoria => {
-            const div = document.createElement('div');
+  
+    //Función para generar un elemento 'div' con su 'innerHTML' correspondiente
+    /**
+     * 
+     * @param {*} categoria 
+     * @returns 
+     */
+    function crearCategoriaHTML(categoria){
+        const div = document.createElement('div');
             div.className = 'flex justify-between items-center p-2 border-b';
             div.innerHTML = `
                 <p class="">
@@ -21,6 +26,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     Eliminar
                 </button>
             `;
+
+            return div;
+    }
+
+    //Función que carga la lista de categorias con su lógica y que es visible gracias a un 'innerHTML' para que sea visual
+    /**
+     * 
+     */
+    function cargarListaCategorias() {
+        const categorias = cargarCategorias();
+        categoriasContainer.innerHTML = '';
+        categorias.forEach(categoria => {
+            const div = crearCategoriaHTML(categoria);
             categoriasContainer.appendChild(div);
         });
 
@@ -32,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //Evento para cuando pulsamos el botón de 'Crear categoría'
     crearBoton.addEventListener('click', () => {
         const nom = nomInput.value.trim();
         const color = colorInput.value;
@@ -63,5 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
         colorInput.value = '#000000';
     });
 
+    //Llamar a la función para que muestre la lista en la página
     cargarListaCategorias();
 });

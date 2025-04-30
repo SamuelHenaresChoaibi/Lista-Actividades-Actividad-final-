@@ -1,3 +1,4 @@
+//Clase 'Tarea'
 class Tarea {
     constructor(id, titol, descripcio, data, categoria, prioritat, realitzada) {
         this.id = id;
@@ -17,6 +18,7 @@ class Tarea {
     }
 }
 
+//Clase 'Categoria'
 class Categoria {
     constructor(nom, color){
         this.nom = nom;

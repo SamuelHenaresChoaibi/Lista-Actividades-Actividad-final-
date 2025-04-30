@@ -1,11 +1,18 @@
 import { cargarChart } from './grafics.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    //Elementos HTML
     const archivoInput = document.getElementById('task-input');
     const tareasPendientes = document.getElementById('pending-tasks');
     const tareasCompletas = document.getElementById('completed-tasks');
     const botonSubirArchivo = document.getElementById('upload-task');
 
+    //Función para generar un elemento 'li' con su 'innerHTML' correspondiente
+    /**
+     * 
+     * @param {*} tarea 
+     * @returns 
+     */
     function crearTareaHTML(tarea) {
         const prioridadColor = tarea.prioritat === 'Alta' ? 'bg-red-200' :
             tarea.prioritat === 'Media' ? 'bg-yellow-200' : 'bg-green-200';
@@ -32,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return li;
     }
 
+    //Función que carga la lista de tareas con su lógica y que es visible gracias a un 'innerHTML' para que sea visual
+    /**
+     * 
+     */
     function cargarListaTareas() {
         const tareas = cargarTareas();
         const tareasJSON = cargarTareasJSON();
@@ -40,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Campos incompletos');
             return;
         }
-    
+
         tareasPendientes.innerHTML = '';
         tareasCompletas.innerHTML = '';
-    
+
         tareas.forEach(tarea => {
             const li = crearTareaHTML(tarea);
             if (tarea.realitzada) {
@@ -61,7 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 tareasPendientes.appendChild(li);
             }
         });
-    
+
+        //Evento para cuando pulsamos el botón de 'mark-task' para cambiar el estado de una tarea
         document.querySelectorAll('.mark-task').forEach(boton => {
             boton.addEventListener('click', () => {
                 const id = boton.dataset.id;
@@ -86,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 cargarChart();
             });
         });
-    
+
+        //Evento para cuando pulsamos el botón de 'delete-task' para cambiar eliminar una tarea
         document.querySelectorAll('.delete-task').forEach(boton => {
             boton.addEventListener('click', () => {
                 const id = boton.dataset.id;
@@ -97,26 +110,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 let existeTareaJSON = false;
 
                 tareas.forEach(tarea => {
-                    if(tarea.id === id && tarea.titol === title){
+                    if (tarea.id === id && tarea.titol === title) {
                         existeTarea = true;
                     }
                 });
-    
+
                 tareasJSON.forEach(tarea => {
-                    if(tarea.id === id && tarea.titol === title){
+                    if (tarea.id === id && tarea.titol === title) {
                         existeTareaJSON = true;
                     }
                 });
 
-                if(existeTarea) eliminarTarea(id);
-                if(existeTareaJSON) eliminarTareaJSON(id);                
-                
+                if (existeTarea) eliminarTarea(id);
+                if (existeTareaJSON) eliminarTareaJSON(id);
+
                 cargarListaTareas();
                 cargarChart();
             });
         });
     }
 
+    //Evento para cuando escribimos el nombre de un archivo JSON y lo subimos para que sea vean como unas tareas creadas por el usuario
     botonSubirArchivo.addEventListener('click', () => {
         const nombreArchivo = archivoInput.value.trim();
         if (!nombreArchivo) {
@@ -148,25 +162,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             nuevaTarea.prioritat,
                             nuevaTarea.realitzada
                         ));
-                    
 
-                    const nuevaCategoria = nuevaTarea.categoria;
-                    if (nuevaCategoria && nuevaCategoria.nom && nuevaCategoria.color) {
-                        let existeCategoria = false;
-                        for (let i = 0; i < categorias.length; i++) {
-                            if (categorias[i].nom === nuevaCategoria.nom && categorias[i].color === nuevaCategoria.color) {
-                                existeCategoria = true;
-                                break;
+
+                        const nuevaCategoria = nuevaTarea.categoria;
+                        if (nuevaCategoria && nuevaCategoria.nom && nuevaCategoria.color) {
+                            let existeCategoria = false;
+                            for (let i = 0; i < categorias.length; i++) {
+                                if (categorias[i].nom === nuevaCategoria.nom && categorias[i].color === nuevaCategoria.color) {
+                                    existeCategoria = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (!existeCategoria) {
-                            categorias.push(new Categoria(nuevaCategoria.nom, nuevaCategoria.color));
+                            if (!existeCategoria) {
+                                categorias.push(new Categoria(nuevaCategoria.nom, nuevaCategoria.color));
+                            }
+                        } else {
+                            console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
                         }
-                    } else {
-                        console.warn('Categoría inválida en tarea, omitiendo:', nuevaTarea);
                     }
-                }
                     guardarTareasJSON(tareasJSON);
                     guardarCategorias(categorias);
                     cargarListaTareas();
@@ -181,9 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
+    //Llamamos a las funciones
     cargarListaTareas();
     cargarChart();
-    
+
 });
 
 

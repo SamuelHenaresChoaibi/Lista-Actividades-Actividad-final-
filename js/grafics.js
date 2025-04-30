@@ -63,7 +63,7 @@ export function cargarChart() {
     labels: labels,
     datasets: [{
       label: 'Tareas Completas',
-      data: labels.map(mes => devolverTareasCompletas(mes)), // Simplificado
+      data: labels.map(mes => devolverTareasCompletas(mes)), 
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgb(255, 99, 132)',
       borderWidth: 1

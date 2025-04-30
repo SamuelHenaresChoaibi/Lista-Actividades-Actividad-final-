@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    //Elementos HTML
     const nomInput = document.getElementById('name-task');
     const descripcionInput = document.getElementById('description');
     const fechaInput = document.getElementById('date-task');
@@ -7,6 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const botonCrearTasca = document.getElementById('create-task');
     const categorias = cargarCategorias();
 
+    //Función para cargar en el 'select' de categorías todas las categorías existentes
+    /**
+     * 
+     */
     function cargarCategoriasSelect() {
         categoriaSelect.innerHTML = '';
         categorias.forEach(categoria => {
@@ -17,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //Evento para crear una tarea
     botonCrearTasca.addEventListener('click', () => {
         const nomValue = nomInput.value.trim();
         const descripcionValue = descripcionInput.value.trim();
@@ -25,25 +31,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const prioridadValue = prioridadSelect.value;
         let colorCategoria = '';
 
+        //Validación de campos
         if (!nomValue || !descripcionValue || !fechaValue || !categoriaValue || !prioridadValue) {
             alert("Hay que rellenar todos los campos para crear una tarea");
         } else {
             categorias.forEach(categoria => {
-                if(categoria.nom === categoriaValue){
+                if (categoria.nom === categoriaValue) {
                     colorCategoria = categoria.color;
                 }
             });
             const tareas = cargarTareas();
+            //Nueva Tarea
             const tareaNueva = new Tarea(
-                generarIdTarea(tareas), 
-                nomValue, 
-                descripcionValue, 
-                fechaValue, 
+                generarIdTarea(tareas),
+                nomValue,
+                descripcionValue,
+                fechaValue,
                 {
                     nom: categoriaValue,
                     color: colorCategoria
-                }, 
-                prioridadValue, 
+                },
+                prioridadValue,
                 false);
 
             tareas.push(tareaNueva);
@@ -55,5 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    //Llamamos a la función cada vez que se actualice la página
     cargarCategoriasSelect();
 });
